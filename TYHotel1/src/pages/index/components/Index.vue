@@ -247,25 +247,8 @@ export default {
     /deep/ * {
       padding: 0;
       margin: 0;
-    }
-    /deep/ img {
-      max-width: 100%;
-    }
-    /deep/ p {
-      font-size: .8rem;
-      /*line-height: 20px;*/
-      font-family: "Microsoft Yahei", Arial, sans-serif;
-
-    }
-    /deep/ span {
-      font-size: .8rem;
-      /*line-height: 24px;*/
-      font-family: "Microsoft Yahei", Arial, sans-serif;
-
-    }
-    /deep/ h1,h2,h3,h4,h5,h6 {
-      /*font-family: "PT Sans","SF UI Display", ".PingFang SC","PingFang SC", "Neue Haas Grotesk Text Pro", "Arial Nova", "Segoe UI", "Microsoft YaHei", "Microsoft JhengHei", "Helvetica Neue", "Source Han Sans SC", "Noto Sans CJK SC", "Source Han Sans CN", "Noto Sans SC", "Source Han Sans TC", "Noto Sans CJK TC", "Hiragino Sans GB", sans-serif;*/
-      text-rendering:optimizelegibility;margin-bottom:1em;font-weight:bold; line-height: 1.2rem;
+      font-size: 28px;
+      color: #ffffff;
     }
   }
 

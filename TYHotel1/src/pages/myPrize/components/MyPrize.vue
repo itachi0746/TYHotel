@@ -20,7 +20,7 @@
         >
           <ul ref="img-ul" class="img-ul">
             <li class="img-li" ref="img-li" v-for="(item,index) in list" :key="index">
-              <div class="li-box" :style="{backgroundImage: imgObj[item.CMF8_PRIZE_TYPE]}">
+              <div class="li-box" :style="{backgroundImage: imgObj[item.CMF3_PRIZE_TYPE]}">
                 <div class="li-box-inner">
                   <div class="li-box-left">
                     <div class="money-box">
@@ -31,7 +31,7 @@
                   <div class="li-box-right">
                     <div class="li-box-right-inner">
                       <div class="prize-name">{{item.CMF3_PRIZE_NAME}}</div>
-                      <div class="prize-time">获奖日期：{{utils.handleTime(item.CMF3_SEND_TIME)}}</div>
+                      <div class="prize-time">获奖日期：{{item.CMF3_SEND_TIME}}</div>
                     </div>
                   </div>
                 </div>
@@ -56,6 +56,7 @@ export default {
       loading: false,
       finished: false,
       isLoading: false,
+      pageIndex: 1, // 页数
       imgObj: { // 不同奖品类型对应不同背景图
         'CMF801': require('../assets/hongbao.png'),
         'CMF802': require('../assets/quan.png'),
@@ -77,27 +78,26 @@ export default {
       utils.toast(this, '未知活动', 'fail')
       return
     }
+    const data = {
+      ActivityId: this.id,
+      PageIndex: this.pageIndex
+    }
     utils.toast(this, '', 'loading')
-    postData('/MyActivityPrizes', {ActivityId: this.id}).then((res) => {
+    postData('/MyActivityPrizes', data).then((res) => {
       console.log(res)
       utils.toast(this, '', 'clear')
       this.list = res.Data.IList
+      for (let item of this.list) { // 格式化时间
+        utils.formatObj(item, false)
+      }
     })
   },
   methods: {
     /**
      * @method 设置滚动容器的高度
      */
-    setImgBoxHeight () {
-      let windowHeight = utils.getClientHeight()
-      let headerHeight = this.$refs.header.offsetHeight
-      console.log(`windowHeight: ${windowHeight}, headerHeight: ${headerHeight}`)
-//      this.$refs['img-box'].style.height = (windowHeight - headerHeight) + 'px'
-      let imgBox = document.getElementById('img-box')
-      imgBox.style.height = (windowHeight - headerHeight) + 'px'
-    },
     setImgBoxHeight2 () {
-      let windowHeight = document.body.clientHeight;
+      let windowHeight = document.body.clientHeight
       let headerHeight = this.$refs.header.offsetHeight
       console.log(`windowHeight: ${windowHeight}, headerHeight: ${headerHeight}`)
 //      this.$refs['img-box'].style.height = (windowHeight - headerHeight) + 'px'
