@@ -73,10 +73,10 @@ export default {
    */
   canRefresh: function (timeStamp, interval) {
     // debugger
-    var curTime = new Date().valueOf()
+    let curTime = new Date().valueOf()
     interval = interval * 60000
     timeStamp = timeStamp.valueOf()
-    var result = curTime - timeStamp
+    let result = curTime - timeStamp
     return result > interval
   },
   getClientHeight: function () {
@@ -103,7 +103,7 @@ export default {
    */
   formatTime: function (shijianchuo, hm) {
     //shijianchuo是整数，否则要parseInt转换
-    // var time = new Date(shijianchuo)
+    // let time = new Date(shijianchuo)
 
     let time = shijianchuo, result
     let y = time.getFullYear()
@@ -116,7 +116,7 @@ export default {
     } else {
       result = y + '-' + this.add0(m) + '-' + this.add0(d)
     }
-    // var s = time.getSeconds()
+    // let s = time.getSeconds()
     // return y + '-' + add0(m) + '-' + add0(d) + ' ' + add0(h) + ':' + add0(mm) + ':' + add0(s)
     // return y + '-' + this.add0(m) + '-' + this.add0(d)
     return result
@@ -217,7 +217,7 @@ export default {
    * @returns {boolean}
    */
   isEmptyObject: function (obj) {
-    for (var key in obj) {
+    for (let key in obj) {
       return false
     }
     return true
@@ -228,9 +228,9 @@ export default {
    * @returns {boolean}
    */
   isEmpty: function (param) {
-    var me = this
-    var theType = typeof param
-    var empty = false
+    let me = this
+    let theType = typeof param
+    let empty = false
     switch (theType)
     {
       case 'string':

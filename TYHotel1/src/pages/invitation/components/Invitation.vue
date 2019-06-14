@@ -28,7 +28,7 @@
           <img src="../assets/b.png" alt="">
         </div>
         <div class="btm-font">{{theDate}}</div>
-        <div class="btm-font">广州某某酒店</div>
+        <div class="btm-font">{{sponsor}}</div>
         <div class="btm-font btm-font2">地址：{{address}}</div>
       </div>
       <div class="action-box-con">
@@ -50,6 +50,7 @@ export default {
       logoUrl: null, // logo图片地址
       theDate: null, // 日期
       address: null, // 地址
+      sponsor: null // 主办方
     }
   },
   methods: {
@@ -80,6 +81,7 @@ export default {
       this.theDate = res.Data.CMA1_START_DATE
       this.address = res.Data.CMA1_ADDRESS
       this.logoUrl = res.Data.CMA1_LOGO_URL
+      this.sponsor = res.Data.CMA1_SPONSOR
     })
   }
 }
