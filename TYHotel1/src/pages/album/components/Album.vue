@@ -7,7 +7,7 @@
         right-text=""
         left-arrow
         @click-left="onClickLeft"
-        @click-right="onClickRight"
+        @click-right=""
       />
       <div v-show="false" class="uploader-box" ref="uploader-box">
         <van-uploader :after-read="onRead" id="uploader-box">
@@ -22,7 +22,6 @@
       </div>
     </div>
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh" id="img-box" class="img-box" ref="img-box">
-      <!--<div class="img-box" ref="img-box">-->
         <van-list
           v-model="loading"
           :finished="finished"
@@ -33,13 +32,13 @@
             <li class="img-li" ref="img-li" v-for="(item,index) in list" :key="index">
               <div class="li-top">
                 <img src="../assets/camera.png" alt="">
-                <span>{{item.date}}</span>
+                <span>{{item.CMA7_CRT_TIME}}</span>
               </div>
               <div class="li-img-box">
                 <van-row>
                   <van-col span="8" v-for="(img,index) in item.imgs" :key="index">
                     <div class="col-box">
-                      <img @click="clickImgLi(img.CMA7_FILE_URL)" v-lazy="img.CMA7_FILE_URL">
+                      <img @click="clickImgLi(item.imgs)" v-lazy="img.CMA7_FILE_URL">
                     </div>
                   </van-col>
                 </van-row>
@@ -47,8 +46,6 @@
             </li>
           </ul>
         </van-list>
-      <!--</div>-->
-
     </van-pull-refresh>
   </div>
 </template>
@@ -58,16 +55,16 @@ import { utils, postData } from '../../../common'
 import { ImagePreview } from 'vant'
 
 export default {
-  name: 'album',
   data () {
     return {
       id: null, // 活动id
-      list: [],
+      list: null,
       loading: false,
       finished: false,
       liHeight: null,
       isLoading: false,
-      pageIndex: 1 // 页数
+      pageIndex: 1, // 当前页
+      pageCount: null // 总页数
     }
   },
   components: {},
@@ -81,25 +78,12 @@ export default {
       utils.toast(this, '未知活动', 'fail')
       return
     }
-    utils.toast(this, '', 'loading')
-    postData('/ActivityImages', {ActivityId: this.id}).then((res) => {
-      console.log(res)
-      utils.toast(this, '', 'clear')
-      this.list = res.Data.IList
-    })
+    this.getData()
   },
   methods: {
     /**
      * @method 设置滚动容器的高度
      */
-    setImgBoxHeight () {
-      let windowHeight = utils.getClientHeight()
-      let headerHeight = this.$refs.header.offsetHeight
-      console.log(`windowHeight: ${windowHeight}, headerHeight: ${headerHeight}`)
-//      this.$refs['img-box'].style.height = (windowHeight - headerHeight) + 'px'
-      let imgBox = document.getElementById('img-box')
-      imgBox.style.height = (windowHeight - headerHeight) + 'px'
-    },
     setImgBoxHeight2 () {
       let windowHeight = document.body.clientHeight
       let headerHeight = this.$refs.header.offsetHeight
@@ -121,13 +105,20 @@ export default {
 //          this.finished = true
 //        }
 //      }, 500)
+      if (this.pageCount === this.pageIndex) { // 加载完全部了
+        this.finished = true
+        this.loading = false
+        return
+      }
+      this.pageIndex++
+      this.getData()
     },
     /**
      * 点击图片Li
-     * @param src 图片地址
+     * @param src 图片地址 数组
      */
     clickImgLi (src) {
-      ImagePreview([src])
+      ImagePreview(src)
     },
     onClickLeft () {
       window.history.back()
@@ -136,11 +127,8 @@ export default {
       document.getElementById('uploader-box').click()
     },
     onRead (data) {
-      this.$toast.loading({
-        //        mask: true,
-        message: '加载中...',
-        duration: 0
-      })
+      utils.toast(this, '', 'loading')
+
       console.log(data)
       const theData = {
         Name: data.file.name,
@@ -149,18 +137,42 @@ export default {
       let form = utils.createFormData2(theData)
       postData('/UploadActivityImages', form).then((res) => {
         console.log(res)
-        this.$toast.success({
-          //          mask: true,
-          message: '上传成功',
-          duration: 1000
-        })
+        utils.toast(this, '上传成功')
       })
     },
     onRefresh () {
-      setTimeout(() => {
-        this.$toast('刷新成功')
+//      setTimeout(() => {
+//        this.$toast('刷新成功')
+//        this.isLoading = false
+//      }, 500)
+      this.pageIndex = 1
+      this.pageCount = null
+      this.list = null
+      this.getData()
+    },
+    /**
+     * 获取数据
+     */
+    getData () {
+      const theData = {
+        ActivityId: this.id,
+        PageIndex: this.pageIndex
+      }
+      utils.toast(this, '', 'loading')
+      postData('/ActivityImages', theData).then((res) => {
+        console.log(res)
+        this.loading = false
+        utils.toast(this, '', 'clear')
+        this.pageCount = res.PageCount
+        this.pageIndex = res.PageIndex
+        this.loading = false
         this.isLoading = false
-      }, 500)
+        this.list = this.list === null ? res.Data.list : this.list.concat(res.Data.list)
+
+        for (let item of this.list) {
+          utils.formatObj(item, false)
+        }
+      })
     }
   }
 }

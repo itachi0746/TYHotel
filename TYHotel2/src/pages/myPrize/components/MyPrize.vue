@@ -11,7 +11,6 @@
       />
     </div>
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh" id="img-box" class="img-box" ref="img-box">
-      <!--<div class="img-box" ref="img-box">-->
         <van-list
           v-model="loading"
           :finished="finished"
@@ -19,47 +18,46 @@
           @load="onLoad"
         >
           <ul ref="img-ul" class="img-ul">
-            <!--<li class="img-li" ref="img-li" v-for="(item,index) in list" :key="index">-->
-              <!--<div class="li-box" :style="{backgroundImage: imgObj[item.CMF8_PRIZE_TYPE]}">-->
-                <!--<div class="li-box-inner">-->
-                  <!--<div class="li-box-left">-->
-                    <!--<div class="money-box">-->
-                      <!--<i class="rmb">￥</i>-->
-                      <!--<span class="money">{{item.CMF3_VALUE}}</span>-->
-                    <!--</div>-->
-                  <!--</div>-->
-                  <!--<div class="li-box-right">-->
-                    <!--<div class="li-box-right-inner">-->
-                      <!--<div class="prize-name">{{item.CMF3_PRIZE_NAME}}</div>-->
-                      <!--<div class="prize-time">获奖日期：{{utils.handleTime(item.CMF3_SEND_TIME)}}</div>-->
-                    <!--</div>-->
-                  <!--</div>-->
-                <!--</div>-->
-              <!--</div>-->
-            <!--</li>-->
             <li class="img-li" ref="img-li" v-for="(item,index) in list" :key="index">
-              <div class="li-box">
+              <div class="li-box" :style="{backgroundImage: imgObj[item.CMF3_PRIZE_TYPE]}">
                 <div class="li-box-inner">
                   <div class="li-box-left">
-                    <img class="border" src="../assets/l.png" alt="">
                     <div class="money-box">
-                      <!--<img src="../assets/k.png" alt="">-->
-                      <img src="../assets/m.png" alt="">
-                      <!--<img src="../assets/n.png" alt="">-->
+                      <i class="rmb">￥</i>
+                      <span class="money">{{item.CMF3_VALUE}}</span>
                     </div>
                   </div>
                   <div class="li-box-right">
                     <div class="li-box-right-inner">
-                      <div class="prize-name">1111</div>
-                      <div class="prize-time">获奖日期：222222</div>
+                      <div class="prize-name">{{item.CMF3_PRIZE_NAME}}</div>
+                      <div class="prize-time">获奖日期：{{item.CMF3_SEND_TIME}}</div>
                     </div>
                   </div>
                 </div>
               </div>
             </li>
+            <!--<li class="img-li" ref="img-li" v-for="(item,index) in list" :key="index">-->
+              <!--<div class="li-box">-->
+                <!--<div class="li-box-inner">-->
+                  <!--<div class="li-box-left">-->
+                    <!--<img class="border" src="../assets/l.png" alt="">-->
+                    <!--<div class="money-box">-->
+                      <!--&lt;!&ndash;<img src="../assets/k.png" alt="">&ndash;&gt;-->
+                      <!--<img src="../assets/m.png" alt="">-->
+                      <!--&lt;!&ndash;<img src="../assets/n.png" alt="">&ndash;&gt;-->
+                    <!--</div>-->
+                  <!--</div>-->
+                  <!--<div class="li-box-right">-->
+                    <!--<div class="li-box-right-inner">-->
+                      <!--<div class="prize-name">1111</div>-->
+                      <!--<div class="prize-time">获奖日期：222222</div>-->
+                    <!--</div>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</li>-->
           </ul>
         </van-list>
-      <!--</div>-->
 
     </van-pull-refresh>
   </div>
@@ -76,18 +74,17 @@ export default {
       loading: false,
       finished: false,
       isLoading: false,
+      pageIndex: 1, // 当前页
+      pageCount: null, // 总页数
       imgObj: { // 不同奖品类型对应不同背景图
-        'CMF801': require('../assets/hongbao.png'),
-        'CMF802': require('../assets/quan.png'),
-        'CMF803': require('../assets/other.png')
+        'CMF801': require('../assets/hongbao.png'), // 红包
+        'CMF802': require('../assets/quan.png'), // 券
+        'CMF803': require('../assets/other.png') // 其他
       }
     }
   },
   components: {},
   mounted () {
-//    setTimeout(() => {
-//      this.setImgBoxHeight()
-//    }, 300)
     this.setImgBoxHeight2()
   },
   created () {
@@ -97,12 +94,7 @@ export default {
       utils.toast(this, '未知活动', 'fail')
       return
     }
-    utils.toast(this, '', 'loading')
-    postData('/MyActivityPrizes', {ActivityId: this.id}).then((res) => {
-      console.log(res)
-      utils.toast(this, '', 'clear')
-      this.list = res.Data.IList
-    })
+    this.getData()
   },
   methods: {
     /**
@@ -118,27 +110,38 @@ export default {
     },
     onLoad () {
       // 异步更新数据
-      setTimeout(() => {
-        for (let i = 0; i < 10; i++) {
-          this.list.push(this.list.length + 1)
-        }
-        // 加载状态结束
+//      setTimeout(() => {
+//        for (let i = 0; i < 10; i++) {
+//          this.list.push(this.list.length + 1)
+//        }
+//        // 加载状态结束
+//        this.loading = false
+//
+//        // 数据全部加载完成
+//        if (this.list.length >= 40) {
+//          this.finished = true
+//        }
+//      }, 500)
+      if (this.pageCount === this.pageIndex) { // 加载完全部了
+        this.finished = true
         this.loading = false
-
-        // 数据全部加载完成
-        if (this.list.length >= 40) {
-          this.finished = true
-        }
-      }, 500)
+        return
+      }
+      this.pageIndex++
+      this.getData()
     },
     onClickLeft () {
       window.history.back()
     },
     onRefresh () {
-      setTimeout(() => {
-        this.$toast('刷新成功')
-        this.isLoading = false
-      }, 500)
+//      setTimeout(() => {
+//        this.$toast('刷新成功')
+//        this.isLoading = false
+//      }, 500)
+      this.pageIndex = 1
+      this.pageCount = null
+      this.list = null
+      this.getData()
     }
   }
 }

@@ -10,8 +10,7 @@
         @click-right=""
       />
     </div>
-    <van-pull-refresh v-model="isLoading" @refresh="onRefresh" id="img-box" class="img-box" ref="img-box">
-      <!--<div class="img-box" ref="img-box">-->
+    <van-pull-refresh v-model="isLoading" disabled @refresh="onRefresh" id="img-box" class="img-box" ref="img-box">
         <van-list
           v-model="loading"
           :finished="finished"
@@ -22,24 +21,40 @@
             <li class="img-li" ref="img-li" v-for="item in list" :key="item">
               <div class="li-box">
                 <div class="li-img-box">
-                  <img src="../assets/favicon.png" alt="" class="li-img">
+                  <img :src="item.CMA1_IMG_URL" alt="" class="li-img">
                 </div>
                 <div class="li-mid">
-                  <div class="li-mid-top">名字</div>
+                  <div class="li-mid-top">{{item.CMA1_SPONSOR}}</div>
                   <div class="li-mid-btm">
-                    <p>2019-5-16</p>
-                    <p>广州海珠区海港大道117号</p>
+                    <p>{{item.CMA1_START_DATE}}</p>
+                    <p>{{item.CMA1_ADDRESS}}</p>
                   </div>
                 </div>
                 <div class="li-action">
                   <div class="li-btn" @click="clickCheck">查 看</div>
                 </div>
               </div>
-              <!--<img src="../assets/coin.png" @click="clickImgLi" v-lazy="require('../assets/coin.png')">-->
             </li>
+            <!--<li class="img-li" ref="img-li" v-for="item in list" :key="item">-->
+              <!--<div class="li-box">-->
+                <!--<div class="li-img-box">-->
+                  <!--<img src="../assets/favicon.png" alt="" class="li-img">-->
+                <!--</div>-->
+                <!--<div class="li-mid">-->
+                  <!--<div class="li-mid-top">名字</div>-->
+                  <!--<div class="li-mid-btm">-->
+                    <!--<p>2019-5-16</p>-->
+                    <!--<p>广州海珠区海港大道117号</p>-->
+                  <!--</div>-->
+                <!--</div>-->
+                <!--<div class="li-action">-->
+                  <!--<div class="li-btn" @click="clickCheck">查 看</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--&lt;!&ndash;<img src="../assets/coin.png" @click="clickImgLi" v-lazy="require('../assets/coin.png')">&ndash;&gt;-->
+            <!--</li>-->
           </ul>
         </van-list>
-      <!--</div>-->
 
     </van-pull-refresh>
   </div>
@@ -52,7 +67,7 @@ export default {
   data () {
     return {
       id: null, // 活动id
-      list: [],
+      list: null,
       loading: false,
       finished: false,
       liHeight: null,
@@ -61,11 +76,6 @@ export default {
   },
   components: {},
   mounted () {
-    console.log(utils, postData)
-
-//    setTimeout(() => {
-//      this.setImgBoxHeight()
-//    }, 300)
     this.setImgBoxHeight2()
   },
   created () {
@@ -75,27 +85,12 @@ export default {
       utils.toast(this, '未知活动', 'fail')
       return
     }
-    utils.toast(this, '', 'loading')
-    postData('/MyActivitys', {'ActivityId': this.id}).then((res) => {
-      console.log(res)
-      utils.toast(this, '', 'clear')
-      this.theDate = res.Data.CMA1_START_DATE
-      this.address = res.Data.CMA1_ADDRESS
-      this.logoUrl = res.Data.CMA1_LOGO_URL
-    })
+    this.getData()
   },
   methods: {
     /**
      * @method 设置滚动容器的高度
      */
-    setImgBoxHeight () {
-      let windowHeight = utils.getClientHeight()
-      let headerHeight = this.$refs.header.offsetHeight
-      console.log(`windowHeight: ${windowHeight}, headerHeight: ${headerHeight}`)
-//      this.$refs['img-box'].style.height = (windowHeight - headerHeight) + 'px'
-      let imgBox = document.getElementById('img-box')
-      imgBox.style.height = (windowHeight - headerHeight) + 'px'
-    },
     setImgBoxHeight2 () {
       let windowHeight = document.body.clientHeight
       let headerHeight = this.$refs.header.offsetHeight
@@ -103,21 +98,6 @@ export default {
 //      this.$refs['img-box'].style.height = (windowHeight - headerHeight) + 'px'
       let imgBox = document.getElementById('img-box')
       imgBox.style.height = (windowHeight - headerHeight) + 'px'
-    },
-    onLoad () {
-      // 异步更新数据
-      setTimeout(() => {
-        for (let i = 0; i < 10; i++) {
-          this.list.push(this.list.length + 1)
-        }
-        // 加载状态结束
-        this.loading = false
-
-        // 数据全部加载完成
-        if (this.list.length >= 40) {
-          this.finished = true
-        }
-      }, 500)
     },
     onClickLeft () {
       window.history.back()
@@ -133,6 +113,20 @@ export default {
      */
     clickCheck () {
 
+    },
+    /**
+     * 获取数据
+     */
+    getData () {
+      utils.toast(this, '', 'loading')
+      postData('/MyActivitys', {'ActivityId': this.id}).then((res) => {
+        console.log(res)
+        utils.toast(this, '', 'clear')
+        this.list = res.Data.list
+        for (let item of this.list) {
+          utils.formatObj(item, false)
+        }
+      })
     }
   }
 }

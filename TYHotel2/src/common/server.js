@@ -8,7 +8,7 @@ if (process.env.NODE_ENV === 'development') {
   ROOT = '/api'
 } else {
   // 生产环境下的地址
-  ROOT = '/MallService'
+  ROOT = '/ActivityHotelService'
 }
 
 const Axios = axios.create({
