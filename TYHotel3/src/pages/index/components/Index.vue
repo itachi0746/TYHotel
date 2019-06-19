@@ -111,10 +111,12 @@ export default {
     this.id = params.activityid
     if (!this.id) {
       utils.toast(this, '未知活动', 'fail')
-      return
+//      return
     }
     utils.toast(this, '', 'loading')
-    postData('/ActivityInfo', {'ActivityId': this.id}).then((res) => {
+    const url = '/welcome/recommend'
+//    const url = '/ActivityInfo'
+    postData(url, {'ActivityId': this.id}).then((res) => {
       console.log(res)
       utils.toast(this, '', 'clear')
       this.ruleDetail = res.Data.CMA1_CONTENT

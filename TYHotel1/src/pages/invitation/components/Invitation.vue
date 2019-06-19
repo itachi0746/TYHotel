@@ -2,7 +2,7 @@
   <div class="main">
     <div class="logo-box">
       <div class="logo-container">
-        <img :src="logoUrl" alt="" v-if="logoUrl">
+        <img :src="resData.CMA1_LOGO_URL" alt="" v-if="resData.CMA1_LOGO_URL">
       </div>
     </div>
     <div class="main-box">
@@ -12,7 +12,7 @@
           <img class="kuang" src="../assets/kuang.png" alt="">
           <div class="title-time">
             <i class="line"></i>
-            {{theDate}}
+            {{resData.CMA1_START_DATE}}
             <i class="line"></i>
           </div>
           <div class="title-img">
@@ -27,9 +27,9 @@
         <div class="btm-icon">
           <img src="../assets/b.png" alt="">
         </div>
-        <div class="btm-font">{{theDate}}</div>
-        <div class="btm-font">{{sponsor}}</div>
-        <div class="btm-font btm-font2">地址：{{address}}</div>
+        <div class="btm-font">{{resData.CMA1_START_DATE}}</div>
+        <div class="btm-font">{{resData.CMA1_SPONSOR}}</div>
+        <div class="btm-font btm-font2">地址：{{resData.CMA1_ADDRESS}}</div>
       </div>
       <div class="action-box-con">
         <div class="action-box" @click="clickBtn">
@@ -47,10 +47,7 @@ export default {
   data () {
     return {
       id: null, // 活动id
-      logoUrl: null, // logo图片地址
-      theDate: null, // 日期
-      address: null, // 地址
-      sponsor: null // 主办方
+      resData: null
     }
   },
   methods: {
@@ -63,26 +60,32 @@ export default {
         console.log(res)
         utils.toast(this, '报名成功', 'success')
       })
+    },
+    getData () {
+      utils.toast(this, '', 'loading')
+      postData('/ActivityInfo', {'ActivityId': this.id}).then((res) => {
+        console.log(res)
+        utils.toast(this, '', 'clear')
+        this.resData = res.Data
+        utils.formatObj(this.resData, false)
+      })
     }
   },
   mounted () {
   },
   created () {
     const params = utils.getUrlParams()
-    this.id = params.activityid
-    if (!this.id) {
-      utils.toast(this, '未知活动', 'fail')
-      return
+    if (process.env.NODE_ENV === 'development') { // 测试用id
+      this.id = '5b8158d60c2d448c8d03591df66c30c9'
+    } else {
+      // 生产环境下的id
+      this.id = params.activityid
+      if (!this.id) {
+        utils.toast(this, '未知活动', 'fail')
+        return
+      }
     }
-    utils.toast(this, '', 'loading')
-    postData('/ActivityInfo', {'ActivityId': this.id}).then((res) => {
-      console.log(res)
-      utils.toast(this, '', 'clear')
-      this.theDate = res.Data.CMA1_START_DATE
-      this.address = res.Data.CMA1_ADDRESS
-      this.logoUrl = res.Data.CMA1_LOGO_URL
-      this.sponsor = res.Data.CMA1_SPONSOR
-    })
+    this.getData()
   }
 }
 </script>

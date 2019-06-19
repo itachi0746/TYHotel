@@ -5,7 +5,8 @@ let ROOT
 // 环境的切换
 if (process.env.NODE_ENV === 'development') {
   // 开发环境下的代理地址，解决本地跨域跨域，配置在config目录下的index.js dev.proxyTable中
-  ROOT = '/api'
+  // ROOT = '/api'
+  ROOT = 'http://mockjs.com'
 } else {
   // 生产环境下的地址
   ROOT = '/ActivityHotelService'
@@ -13,7 +14,7 @@ if (process.env.NODE_ENV === 'development') {
 
 const Axios = axios.create({
   baseURL: ROOT, // 因为我本地做了反向代理
-  timeout: 100000
+  timeout: 10000
   // responseType: "json",
   // withCredentials: true, // 是否允许带cookie这些
   // headers: {
@@ -69,12 +70,21 @@ Axios.interceptors.response.use(
   },
   error => {
     Toast.clear()
-    Notify({
-      message: '请求出错', // 弹出错误信息
-      duration: 2000,
-      background: '#fef0f0',
-      color: 'red'
-    })
+    if (error.code === 'ECONNABORTED' && error.message.indexOf('timeout') !== -1) { // 超时 todo 超时处理
+      Notify({
+        message: '请求超时', // 弹出错误信息
+        duration: 2000,
+        background: '#fef0f0',
+        color: 'red'
+      })
+    } else {
+      Notify({
+        message: '请求出错', // 弹出错误信息
+        duration: 2000,
+        background: '#fef0f0',
+        color: 'red'
+      })
+    }
 
     // 下面是接口回调的status
 

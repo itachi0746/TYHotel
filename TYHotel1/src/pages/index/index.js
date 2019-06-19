@@ -9,6 +9,9 @@ import '@/common/rem.js'
 import '@/styles/common.css'
 import axiosPlugin from '../../common/server'
 Vue.use(axiosPlugin)
+
+require('../../common/mock') // 用于模拟数据, 正式环境需要注释掉
+
 // import 'animate.css/animate.min.css'
 
 Vue.use(Button).use(Cell).use(Loading).use(Progress)

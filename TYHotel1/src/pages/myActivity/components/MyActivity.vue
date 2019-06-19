@@ -12,7 +12,7 @@
     </div>
     <van-pull-refresh v-model="isLoading" disabled @refresh="onRefresh" id="img-box" class="img-box" ref="img-box">
       <ul ref="img-ul" class="img-ul">
-        <li class="img-li" ref="img-li" v-for="item in list" :key="item">
+        <li class="img-li" ref="img-li" v-for="(item,index) in list" :key="index">
           <div class="li-box">
             <img :src="item.CMA1_IMG_URL" alt="" class="li-img">
             <div class="li-mid">
@@ -23,26 +23,10 @@
               </div>
             </div>
             <div class="li-action">
-              <div class="li-btn" @click="clickCheck">查 看</div>
+              <div class="li-btn" @click="clickCheck(item.CMA1_ID)">查 看</div>
             </div>
           </div>
         </li>
-        <!--<li class="img-li" ref="img-li">-->
-          <!--<div class="li-box">-->
-            <!--<img src="../assets/coin.png" alt="" class="li-img">-->
-            <!--<div class="li-mid">-->
-              <!--<div class="li-mid-top">名字</div>-->
-              <!--<div class="li-mid-btm">-->
-                <!--<p>2019-5-16</p>-->
-                <!--<p>广州海珠区海港大道117号</p>-->
-              <!--</div>-->
-            <!--</div>-->
-            <!--<div class="li-action">-->
-              <!--<div class="li-btn" @click="clickCheck">查 看</div>-->
-            <!--</div>-->
-          <!--</div>-->
-          <!--&lt;!&ndash;<img src="../assets/coin.png" @click="clickImgLi" v-lazy="require('../assets/coin.png')">&ndash;&gt;-->
-        <!--</li>-->
       </ul>
     </van-pull-refresh>
   </div>
@@ -60,6 +44,7 @@ export default {
       finished: false,
       liHeight: null,
       isLoading: false
+
     }
   },
   components: {},
@@ -68,10 +53,15 @@ export default {
   },
   created () {
     const params = utils.getUrlParams()
-    this.id = params.activityid
-    if (!this.id) {
-      utils.toast(this, '未知活动', 'fail')
-      return
+    if (process.env.NODE_ENV === 'development') { // 测试用id
+      this.id = '5b8158d60c2d448c8d03591df66c30c9'
+    } else {
+      // 生产环境下的id
+      this.id = params.activityid
+      if (!this.id) {
+        utils.toast(this, '未知活动', 'fail')
+        return
+      }
     }
     this.getData()
   },
@@ -98,9 +88,10 @@ export default {
     },
     /**
      * 点击查看
+     * param id 活动id
      */
-    clickCheck () {
-
+    clickCheck (id) {
+      window.GoToPage('', 'index.html', {activityid: id})
     },
     /**
      * 获取数据
@@ -110,7 +101,7 @@ export default {
       postData('/MyActivitys', {'ActivityId': this.id}).then((res) => {
         console.log(res)
         utils.toast(this, '', 'clear')
-        this.list = res.Data.list
+        this.list = res.Data
         for (let item of this.list) {
           utils.formatObj(item, false)
         }

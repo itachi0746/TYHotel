@@ -18,26 +18,8 @@
         @load="onLoad"
       >
         <ul ref="img-ul" class="img-ul">
-          <!--<li class="img-li" ref="img-li" v-for="(item,index) in list" :key="index">-->
-            <!--<div class="li-box">-->
-              <!--<div class="li-box-inner">-->
-                <!--<div class="li-box-left">-->
-                  <!--<div class="money-box">-->
-                    <!--<i class="rmb">￥</i>-->
-                    <!--<span class="money">777</span>-->
-                  <!--</div>-->
-                <!--</div>-->
-                <!--<div class="li-box-right">-->
-                  <!--<div class="li-box-right-inner">-->
-                    <!--<div class="prize-name">名字</div>-->
-                    <!--<div class="prize-time">获奖日期：2019-9-9</div>-->
-                  <!--</div>-->
-                <!--</div>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</li>-->
           <li class="img-li" ref="img-li" v-for="(item,index) in list" :key="index">
-            <div class="li-box" :style="{backgroundImage: imgObj[item.CMF3_PRIZE_TYPE]}">
+            <div class="li-box" :style="{backgroundImage: `url(${imgObj[item.CMF3_PRIZE_TYPE]})`}">
               <div class="li-box-inner">
                 <div class="li-box-left">
                   <div class="money-box">
@@ -86,10 +68,15 @@ export default {
   },
   created () {
     const params = utils.getUrlParams()
-    this.id = params.activityid
-    if (!this.id) {
-      utils.toast(this, '未知活动', 'fail')
-      return
+    if (process.env.NODE_ENV === 'development') { // 测试用id
+      this.id = '5b8158d60c2d448c8d03591df66c30c9'
+    } else {
+      // 生产环境下的id
+      this.id = params.activityid
+      if (!this.id) {
+        utils.toast(this, '未知活动', 'fail')
+        return
+      }
     }
     this.getData()
   },
@@ -157,7 +144,7 @@ export default {
         this.pageIndex = res.PageIndex
         this.loading = false
         this.isLoading = false
-        this.list = this.list === null ? res.Data.list : this.list.concat(res.Data.list)
+        this.list = this.list === null ? res.Data : this.list.concat(res.Data)
 
         for (let item of this.list) {
           utils.formatObj(item, false)

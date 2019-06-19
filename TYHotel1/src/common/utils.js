@@ -496,24 +496,38 @@ export default {
    */
   getLocation () {
     let lng, // 经度
-      lat // 纬度
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        function (position) {
-          console.log('经度:', position.coords.longitude)
-          console.log('纬度:', position.coords.latitude)
-          lng = position.coords.longitude
-          lat = position.coords.latitude
-        },
-        function (e) {
-          console.log('获取经纬度失败')
-          throw(e.message)
-        }
-      )
-    } else {
-      console.log('该浏览器不支持获取地理位置。')
-    }
-    return {'lng': lng, 'lat': lat}
+      lat; // 纬度
+    return new Promise(function (resolve, reject) {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          function (position) {
+            console.log('经度:', position.coords.longitude)
+            console.log('纬度:', position.coords.latitude)
+            lng = position.coords.longitude
+            lat = position.coords.latitude
+            resolve({'lng': lng, 'lat': lat})
+          },
+          function (e) {
+            console.log('获取经纬度失败')
+            reject(e.message)
+          }
+        )
+      } else {
+        console.log('该浏览器不支持获取地理位置。')
+        lng = lat = 0
+        resolve({'lng': lng, 'lat': lat})
+
+      }
+    })
+
+  },
+  /**
+   * 返回随机整数
+   * @param max 最大值 int
+   * @returns {number}
+   */
+  getRandomInt (max) {
+    return Math.floor(Math.random() * Math.floor(max));
   }
 
 }

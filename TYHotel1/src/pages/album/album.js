@@ -7,6 +7,7 @@ import '@/common/rem.js'
 import '@/styles/common.css'
 
 import { Row, Col, List, Cell, Lazyload, NavBar, Toast, Uploader, Icon, PullRefresh } from 'vant'
+require('../../common/mock') // 用于模拟数据, 正式环境需要注释掉
 
 Vue.use(List).use(Cell).use(Lazyload).use(NavBar).use(Toast).use(Uploader).use(Icon).use(PullRefresh)
   .use(Row).use(Col)
