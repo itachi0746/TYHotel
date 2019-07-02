@@ -168,7 +168,7 @@ export default {
         this.pageIndex = res.PageIndex
         this.loading = false
         this.isLoading = false
-        this.list = this.list === null ? res.Data : this.list.concat(res.Data)
+        this.list = this.list === null ? res.Data.Models : this.list.concat(res.Data.Models)
 
         for (let item of this.list) {
           utils.formatObj(item, false)

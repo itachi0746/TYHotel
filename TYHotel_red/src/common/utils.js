@@ -508,8 +508,9 @@ export default {
             resolve({'lng': lng, 'lat': lat})
           },
           function (e) {
-            console.log('获取经纬度失败')
-            reject(e.message)
+            console.log('获取经纬度失败:', e.message)
+            resolve({'lng': 0, 'lat': 0})
+            // reject(e.message)
           }
         )
       } else {

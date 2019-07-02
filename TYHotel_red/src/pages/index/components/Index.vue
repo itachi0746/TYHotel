@@ -91,13 +91,13 @@ export default {
       })
     },
     clickMyAct () {
-      window.GoToPage('', 'myActivity.html', {})
+      window.GoToPage('', 'myActivity.html', {'activityId': this.id})
     },
     clickMyAlbum () {
-      window.GoToPage('', 'album.html', {})
+      window.GoToPage('', 'album.html', {'activityId': this.id})
     },
     clickMyPrize () {
-      window.GoToPage('', 'myPrize.html', {})
+      window.GoToPage('', 'myPrize.html', {'activityId': this.id})
     },
     getData () {
       utils.toast(this, '', 'loading')
