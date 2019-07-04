@@ -29,16 +29,16 @@
           @load="onLoad"
         >
           <ul ref="img-ul" class="img-ul">
-            <li class="img-li" ref="img-li" v-for="(item,index) in list" :key="index">
+            <li class="img-li" ref="img-li" v-for="(item,index) in picArr" :key="index">
               <div class="li-top">
                 <img src="../assets/p.png" alt="">
-                <span>{{item.CMA7_CRT_TIME}}</span>
+                <span>{{item.date}}</span>
               </div>
               <div class="li-img-box">
                 <van-row>
-                  <van-col span="8" v-for="(img,index) in item.imgs" :key="index">
+                  <van-col span="8" v-for="(img,index) in item.imgArr" :key="index">
                     <div class="col-box">
-                      <img @click="clickImgLi(item.imgs)" v-lazy="img.CMA7_FILE_URL">
+                      <img @click="clickImgLi(img.CMA7_FILE_URL)" v-lazy="img.CMA7_FILE_URL">
                     </div>
                   </van-col>
                 </van-row>
@@ -65,19 +65,25 @@ export default {
       liHeight: null,
       isLoading: false,
       pageIndex: 1, // 当前页
-      pageCount: null // 总页数
+      pageCount: null, // 总页数
+      picArr: [] // 相册数组
     }
   },
   components: {},
   mounted () {
-    this.setImgBoxHeight2()
+    utils.hasSetRem(this.setImgBoxHeight2)
   },
   created () {
     const params = utils.getUrlParams()
-    this.id = params.activityid
-    if (!this.id) {
-      utils.toast(this, '未知活动', 'fail')
-      return
+    if (process.env.NODE_ENV === 'development') { // 测试用id
+      this.id = '5b8158d60c2d448c8d03591df66c30c9'
+    } else {
+      // 生产环境下的id
+      this.id = params.activityid
+      if (!this.id) {
+        utils.toast(this, '未知活动', 'fail')
+        return
+      }
     }
     this.getData()
   },
@@ -94,18 +100,19 @@ export default {
     },
     onLoad () {
       // 异步更新数据
-//      setTimeout(() => {
-//        for (let i = 0; i < 10; i++) {
-//          this.list.push(this.list.length + 1)
-//        }
-//        // 加载状态结束
-//        this.loading = false
-//
-//        // 数据全部加载完成
-//        if (this.list.length >= 40) {
-//          this.finished = true
-//        }
-//      }, 500)
+      //      setTimeout(() => {
+      //        for (let i = 0; i < 10; i++) {
+      //          this.list.push(this.list.length + 1)
+      //        }
+      //        // 加载状态结束
+      //        this.loading = false
+      //
+      //        // 数据全部加载完成
+      //        if (this.list.length >= 40) {
+      //          this.finished = true
+      //        }
+      //      }, 500)
+
       if (this.pageCount === this.pageIndex) { // 加载完全部了
         this.finished = true
         this.loading = false
@@ -116,10 +123,10 @@ export default {
     },
     /**
      * 点击图片Li
-     * @param src 图片地址
+     * @param src 图片地址 数组
      */
     clickImgLi (src) {
-      ImagePreview(src)
+      ImagePreview([src])
     },
     onClickLeft () {
       window.history.back()
@@ -138,17 +145,31 @@ export default {
       let form = utils.createFormData2(theData)
       postData('/UploadActivityImages', form).then((res) => {
         console.log(res)
+        //        this.list.push({
+        //          CMA7_CRT_TIME: res.Data.CMA7_CRT_TIME,
+        //          CMA7_FILE_URL: res.Data.CMA7_FILE_URL
+        //        })
+        const imgDate = res.Data.ReferenceValues.CMA7_CRT_TIME
+        let have = false // 是否已经有这个日期
+        for (let pic of this.picArr) {
+          const theDate = pic.date
+          if (theDate === imgDate) { // 如果日期相同 就push进去
+            have = true
+            pic.imgArr.push(res.Data)
+          }
+        }
+        if (!have) { // 如果没这个日期, 就新加一个
+          let obj = {date: imgDate, imgArr: [res.Data]}
+          this.picArr.push(obj)
+        }
         utils.toast(this, '上传成功')
       })
     },
     onRefresh () {
-//      setTimeout(() => {
-//        this.$toast('刷新成功')
-//        this.isLoading = false
-//      }, 500)
       this.pageIndex = 1
       this.pageCount = null
-      this.list = null
+      this.list = null // 清空
+      this.picArr = [] // 清空
       this.getData()
     },
     /**
@@ -162,18 +183,46 @@ export default {
       utils.toast(this, '', 'loading')
       postData('/ActivityImages', theData).then((res) => {
         console.log(res)
-        this.loading = false
         utils.toast(this, '', 'clear')
         this.pageCount = res.PageCount
         this.pageIndex = res.PageIndex
         this.loading = false
         this.isLoading = false
-        this.list = this.list === null ? res.Data.list : this.list.concat(res.Data.list)
-
+        this.list = this.list === null ? res.Data.Models : this.list.concat(res.Data.Models)
+        this.handleList()
         for (let item of this.list) {
           utils.formatObj(item, false)
         }
       })
+    },
+    /**
+     * 处理列表数据
+     */
+    handleList () {
+      for (let item of this.list) { // 处理picArr, 得到有对应日期的数组
+        let theDate = item.ReferenceValues.CMA7_CRT_TIME // 请求回来的图片日期
+        if (!this.picArr.length) { // 如果没数据先push
+          let obj = {date: theDate, imgArr: []}
+          this.picArr.push(obj)
+        } else {
+          for (let obj of this.picArr) { // 遍历本地图片数组
+            let objDate = obj.date
+            if (objDate !== theDate) { // 比较图片日期 如果没有则新增一个对象保存
+              let obj = {date: theDate, imgArr: []}
+              this.picArr.push(obj)
+            }
+          }
+        }
+      }
+      for (let obj of this.picArr) {
+        const objDate = obj.date
+        for (let item of this.list) {
+          const theDate = item.ReferenceValues.CMA7_CRT_TIME // 请求回来的图片日期
+          if (objDate === theDate) { // 把图片对象push进去对应的日期数组里面
+            obj.imgArr.push(item)
+          }
+        }
+      }
     }
   }
 }

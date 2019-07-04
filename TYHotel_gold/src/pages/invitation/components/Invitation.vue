@@ -2,25 +2,31 @@
   <div class="main">
     <div class="logo-box">
       <div class="logo-container">
-        <img :src="logoUrl" alt="" v-if="logoUrl">
+        <img :src="resData.CMA1_LOGO_URL" alt="" v-if="resData">
       </div>
     </div>
     <div class="title-box">
       <!--<img src="../assets/yaoqinghan.png" alt="">-->
     </div>
     <div class="btm">
-      <div class="btm-font">{{theDate}}</div>
+      <div class="btm-font">{{resData.CMA1_START_DATE}}</div>
       <div class="btm-font btm-font-h">
         <i class="line"></i>
         抽奖活动
         <i class="line"></i>
       </div>
-      <div class="btm-font">广州某某酒店</div>
-      <div class="btm-font btm-font2">地址：{{address}}</div>
+      <div class="btm-font">{{resData.CMA1_SPONSOR}}</div>
+      <div class="btm-font btm-font2">地址：{{resData.CMA1_ADDRESS}}</div>
     </div>
     <div class="action-box-con">
-      <div class="action-box" @click="clickBtn">
+      <div class="action-box" @click="clickBtn" v-if="!isJoined">
         我要报名
+      </div>
+      <div class="action-box van-button--disabled" v-if="isJoined">
+        您已报名
+      </div>
+      <div class="action-box mt20" @click="toIndex" v-if="isJoined">
+        去主页
       </div>
     </div>
   </div>
@@ -33,9 +39,8 @@ export default {
   data () {
     return {
       id: null, // 活动id
-      logoUrl: null, // logo图片地址
-      theDate: '9月5日10:00-18:00', // 日期
-      address: '某城市某某大厦10楼会客厅', // 地址
+      resData: null,
+      isJoined: false // 是否已参加该活动
     }
   },
   methods: {
@@ -47,26 +52,52 @@ export default {
       postData('/JoinInActivity', {'ActivityId': this.id}).then((res) => {
         console.log(res)
         utils.toast(this, '报名成功', 'success')
+        this.isJoined = true
       })
+    },
+    getData () {
+      utils.toast(this, '', 'loading')
+      postData('/ActivityInfo', {'ActivityId': this.id}).then((res) => {
+        console.log(res)
+        utils.toast(this, '', 'clear')
+        this.resData = res.Data
+        utils.formatObj(this.resData, false)
+        this.getJoinStatus()
+      })
+    },
+    /**
+     * 获取参加状态
+     */
+    getJoinStatus () {
+      utils.toast(this, '', 'loading')
+      postData('/GetJoinStatus', {'ActivityId': this.id}).then((res) => {
+        console.log(res)
+        utils.toast(this, '', 'clear')
+        this.isJoined = res.Data
+      })
+    },
+    /**
+     * 去主页
+     */
+    toIndex () {
+      window.GoToPage('', 'index.html', {'ActivityId': this.id})
     }
   },
   mounted () {
   },
   created () {
     const params = utils.getUrlParams()
-    this.id = params.activityid
-    if (!this.id) {
-      utils.toast(this, '未知活动', 'fail')
-      return
+    if (process.env.NODE_ENV === 'development') { // 测试用id
+      this.id = '5b8158d60c2d448c8d03591df66c30c9'
+    } else {
+      // 生产环境下的id
+      this.id = params.activityid
+      if (!this.id) {
+        utils.toast(this, '未知活动', 'fail')
+        return
+      }
     }
-    utils.toast(this, '', 'loading')
-    postData('/ActivityInfo', {'ActivityId': this.id}).then((res) => {
-      console.log(res)
-      utils.toast(this, '', 'clear')
-      this.theDate = res.Data.CMA1_START_DATE
-      this.address = res.Data.CMA1_ADDRESS
-      this.logoUrl = res.Data.CMA1_LOGO_URL
-    })
+    this.getData()
   }
 }
 </script>

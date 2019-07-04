@@ -63,9 +63,10 @@ export default {
   data () {
     return {
       id: null, // 活动id
-      showLayer: true,
+      showLayer: false,
       logoUrl: null, // 酒店logo图片
       ruleDetail: null, // 活动规则说明
+      isSigned: false // 是否已签到
     }
   },
   components: {},
@@ -79,10 +80,9 @@ export default {
     /**
      * 点击签到
      */
-    clickSign () {
+    async clickSign () {
       utils.toast(this, '', 'loading')
-      let posObj = utils.getLocation()
-      // todo 判断经纬度对象是否为空
+      let posObj = await utils.getLocation2()
       let theData = {
         ActivityId: this.id,
         latitude: posObj.lat + '',
@@ -95,13 +95,36 @@ export default {
       })
     },
     clickMyAct () {
-      window.GoToPage('', 'myActivity.html', {})
+      window.GoToPage('', 'myActivity.html', {'activityId': this.id})
     },
     clickMyAlbum () {
-      window.GoToPage('', 'album.html', {})
+      window.GoToPage('', 'album.html', {'activityId': this.id})
     },
     clickMyPrize () {
-      window.GoToPage('', 'myPrize.html', {})
+      window.GoToPage('', 'myPrize.html', {'activityId': this.id})
+    },
+    getData () {
+      utils.toast(this, '', 'loading')
+      const url = '/ActivityInfo'
+      postData(url, {'ActivityId': this.id}).then((res) => {
+        console.log(res)
+        utils.toast(this, '', 'clear')
+        this.ruleDetail = res.Data.CMA1_CONTENT
+        this.logoUrl = res.Data.CMA1_LOGO_URL
+        this.getSignStatus()
+      })
+    },
+    /**
+     * 获取签到状态
+     */
+    getSignStatus () {
+      utils.toast(this, '', 'loading')
+      const url = '/GetSignStatus'
+      postData(url, {'ActivityId': this.id}).then((res) => {
+        console.log(res)
+        this.isSigned = res.Data
+        utils.toast(this, '', 'clear')
+      })
     }
   },
   mounted () {
@@ -109,18 +132,17 @@ export default {
   },
   created () {
     const params = utils.getUrlParams()
-    this.id = params.activityid
-    if (!this.id) {
-      utils.toast(this, '未知活动', 'fail')
-      return
+    if (process.env.NODE_ENV === 'development') { // 测试用id
+      this.id = '5b8158d60c2d448c8d03591df66c30c9'
+    } else {
+      // 生产环境下的id
+      this.id = params.activityid
+      if (!this.id) {
+        utils.toast(this, '未知活动', 'fail')
+        return
+      }
     }
-    utils.toast(this, '', 'loading')
-    postData('/ActivityInfo', {'ActivityId': this.id}).then((res) => {
-      console.log(res)
-      utils.toast(this, '', 'clear')
-      this.ruleDetail = res.Data.CMA1_CONTENT
-      this.logoUrl = res.Data.CMA1_LOGO_URL
-    })
+    this.getData()
   }
 }
 </script>

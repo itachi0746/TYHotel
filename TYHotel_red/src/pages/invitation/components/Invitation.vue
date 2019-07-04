@@ -2,7 +2,7 @@
   <div class="main">
     <div class="logo-box">
       <div class="logo-container">
-        <img :src="resData.CMA1_LOGO_URL" alt="" v-if="resData.CMA1_LOGO_URL">
+        <img :src="resData.CMA1_LOGO_URL" alt="" v-if="resData">
       </div>
     </div>
     <div class="main-box">
@@ -32,8 +32,14 @@
         <div class="btm-font btm-font2">地址：{{resData.CMA1_ADDRESS}}</div>
       </div>
       <div class="action-box-con">
-        <div class="action-box" @click="clickBtn">
+        <div class="action-box" @click="clickBtn" v-if="!isJoined">
           我要报名
+        </div>
+        <div class="action-box van-button--disabled" v-if="isJoined">
+          您已报名
+        </div>
+        <div class="action-box mt20" @click="toIndex" v-if="isJoined">
+          去主页
         </div>
       </div>
     </div>
@@ -47,7 +53,8 @@ export default {
   data () {
     return {
       id: null, // 活动id
-      resData: null
+      resData: null,
+      isJoined: false // 是否已参加该活动
     }
   },
   methods: {
@@ -59,6 +66,7 @@ export default {
       postData('/JoinInActivity', {'ActivityId': this.id}).then((res) => {
         console.log(res)
         utils.toast(this, '报名成功', 'success')
+        this.isJoined = true
       })
     },
     getData () {
@@ -68,7 +76,25 @@ export default {
         utils.toast(this, '', 'clear')
         this.resData = res.Data
         utils.formatObj(this.resData, false)
+        this.getJoinStatus()
       })
+    },
+    /**
+     * 获取参加状态
+     */
+    getJoinStatus () {
+      utils.toast(this, '', 'loading')
+      postData('/GetJoinStatus', {'ActivityId': this.id}).then((res) => {
+        console.log(res)
+        utils.toast(this, '', 'clear')
+        this.isJoined = res.Data
+      })
+    },
+    /**
+     * 去主页
+     */
+    toIndex () {
+      window.GoToPage('', 'index.html', {'ActivityId': this.id})
     }
   },
   mounted () {
@@ -220,4 +246,5 @@ export default {
     font-weight: bold;
     @include defaultFlex;
   }
+
 </style>

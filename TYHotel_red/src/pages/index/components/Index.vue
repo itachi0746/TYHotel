@@ -13,8 +13,11 @@
         </div>
         <div class="fill"></div>
         <div class="btn-box">
-          <div class="btn-container" @click="clickSign">
+          <div class="btn-container" @click="clickSign" v-if="!isSigned">
             <span>签 到</span>
+          </div>
+          <div class="btn-container van-button--disabled" v-else>
+            <span>您已签到</span>
           </div>
         </div>
         <div class="rule-box">
@@ -62,6 +65,7 @@ export default {
       showLayer: false,
       logoUrl: null, // 酒店logo图片
       ruleDetail: null, // 活动规则说明
+      isSigned: false // 是否已签到
     }
   },
   components: {},
@@ -77,8 +81,7 @@ export default {
      */
     async clickSign () {
       utils.toast(this, '', 'loading')
-      let posObj = await utils.getLocation()
-      // todo 判断经纬度对象是否为空
+      let posObj = await utils.getLocation2()
       let theData = {
         ActivityId: this.id,
         latitude: posObj.lat + '',
@@ -107,6 +110,19 @@ export default {
         utils.toast(this, '', 'clear')
         this.ruleDetail = res.Data.CMA1_CONTENT
         this.logoUrl = res.Data.CMA1_LOGO_URL
+        this.getSignStatus()
+      })
+    },
+    /**
+     * 获取签到状态
+     */
+    getSignStatus () {
+      utils.toast(this, '', 'loading')
+      const url = '/GetSignStatus'
+      postData(url, {'ActivityId': this.id}).then((res) => {
+        console.log(res)
+        this.isSigned = res.Data
+        utils.toast(this, '', 'clear')
       })
     }
   },

@@ -30,7 +30,7 @@
                 <div class="li-box-right">
                   <div class="li-box-right-inner">
                     <div class="prize-name">{{item.CMF3_PRIZE_NAME}}</div>
-                    <div class="prize-time">获奖日期：{{item.CMF3_SEND_TIME}}</div>
+                    <div class="prize-time">获奖日期：{{item.CMF3_CRT_TIME}}</div>
                   </div>
                 </div>
               </div>
@@ -64,7 +64,7 @@ export default {
   },
   components: {},
   mounted () {
-    this.setImgBoxHeight2()
+    utils.hasSetRem(this.setImgBoxHeight2)
   },
   created () {
     const params = utils.getUrlParams()
@@ -99,20 +99,20 @@ export default {
 //          this.list.push(this.list.length + 1)
 //        }
 //        // 加载状态结束
-//        this.loading = false
+      this.loading = false
 //
 //        // 数据全部加载完成
 //        if (this.list.length >= 40) {
 //          this.finished = true
 //        }
 //      }, 500)
-      if (this.pageCount === this.pageIndex) { // 加载完全部了
-        this.finished = true
-        this.loading = false
-        return
-      }
-      this.pageIndex++
-      this.getData()
+//      if (this.pageCount === this.pageIndex) { // 加载完全部了
+//        this.finished = true
+//        this.loading = false
+//        return
+//      }
+//      this.pageIndex++
+//      this.getData()
     },
     onClickLeft () {
       window.history.back()
@@ -122,10 +122,10 @@ export default {
 //        this.$toast('刷新成功')
 //        this.isLoading = false
 //      }, 500)
-      this.pageIndex = 1
-      this.pageCount = null
-      this.list = null
-      this.getData()
+//      this.pageIndex = 1
+//      this.pageCount = null
+//      this.list = null
+//      this.getData()
     },
     /**
      * 获取数据
@@ -139,11 +139,12 @@ export default {
       postData('/MyActivityPrizes', theData).then((res) => {
         console.log(res)
         utils.toast(this, '', 'clear')
-        this.pageCount = res.PageCount
-        this.pageIndex = res.PageIndex
-        this.loading = false
-        this.isLoading = false
-        this.list = this.list === null ? res.Data : this.list.concat(res.Data)
+//        this.pageCount = res.PageCount
+//        this.pageIndex = res.PageIndex
+//        this.loading = false
+//        this.isLoading = false
+//        this.list = this.list === null ? res.Data : this.list.concat(res.Data)
+        this.list = res.Data
 
         for (let item of this.list) {
           utils.formatObj(item, false)

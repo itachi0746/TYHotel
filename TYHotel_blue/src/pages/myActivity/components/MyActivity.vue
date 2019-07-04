@@ -68,18 +68,24 @@ export default {
       finished: false,
       liHeight: null,
       isLoading: false
+
     }
   },
   components: {},
   mounted () {
-    this.setImgBoxHeight2()
+    utils.hasSetRem(this.setImgBoxHeight2)
   },
   created () {
     const params = utils.getUrlParams()
-    this.id = params.activityid
-    if (!this.id) {
-      utils.toast(this, '未知活动', 'fail')
-      return
+    if (process.env.NODE_ENV === 'development') { // 测试用id
+      this.id = '5b8158d60c2d448c8d03591df66c30c9'
+    } else {
+      // 生产环境下的id
+      this.id = params.activityid
+      if (!this.id) {
+        utils.toast(this, '未知活动', 'fail')
+        return
+      }
     }
     this.getData()
   },
@@ -91,7 +97,7 @@ export default {
       let windowHeight = document.body.clientHeight
       let headerHeight = this.$refs.header.offsetHeight
       console.log(`windowHeight: ${windowHeight}, headerHeight: ${headerHeight}`)
-//      this.$refs['img-box'].style.height = (windowHeight - headerHeight) + 'px'
+      //      this.$refs['img-box'].style.height = (windowHeight - headerHeight) + 'px'
       let imgBox = document.getElementById('img-box')
       imgBox.style.height = (windowHeight - headerHeight) + 'px'
     },
@@ -106,9 +112,10 @@ export default {
     },
     /**
      * 点击查看
+     * param id 活动id
      */
-    clickCheck () {
-
+    clickCheck (id) {
+      window.GoToPage('', 'index.html', {activityid: id})
     },
     /**
      * 获取数据
@@ -118,7 +125,7 @@ export default {
       postData('/MyActivitys', {'ActivityId': this.id}).then((res) => {
         console.log(res)
         utils.toast(this, '', 'clear')
-        this.list = res.Data.list
+        this.list = res.Data
         for (let item of this.list) {
           utils.formatObj(item, false)
         }

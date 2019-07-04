@@ -49,7 +49,7 @@ export default {
   },
   components: {},
   mounted () {
-    this.setImgBoxHeight2()
+    utils.hasSetRem(this.setImgBoxHeight2)
   },
   created () {
     const params = utils.getUrlParams()
