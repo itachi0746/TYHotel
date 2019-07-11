@@ -22,10 +22,11 @@
               <div class="li-box" :style="{backgroundImage: imgObj[item.CMF3_PRIZE_TYPE]}">
                 <div class="li-box-inner">
                   <div class="li-box-left">
-                    <div class="money-box">
-                      <i class="rmb">￥</i>
-                      <span class="money">{{item.CMF3_VALUE}}</span>
-                    </div>
+                    <!--<div class="money-box">-->
+                      <!--<i class="rmb">￥</i>-->
+                      <!--<span class="money">{{item.CMF3_VALUE}}</span>-->
+                    <!--</div>-->
+                    <img :src="logoObj[item.CMF3_PRIZE_TYPE]" alt="">
                   </div>
                   <div class="li-box-right">
                     <div class="li-box-right-inner">
@@ -60,6 +61,11 @@ export default {
         'CMF801': require('../assets/hongbao.png'), // 红包
         'CMF802': require('../assets/quan.png'), // 券
         'CMF803': require('../assets/other.png') // 其他
+      },
+      logoObj: { // 不同奖品类型对应不同logo
+        'CMF801': require('../assets/k.png'), // 红包
+        'CMF802': require('../assets/m.png'), // 券
+        'CMF803': require('../assets/n.png') // 其他
       }
     }
   },
@@ -188,7 +194,7 @@ export default {
     li {
       width: 100%;
       @include borderBox();
-      padding: 30px 25px 0;
+      padding: 20px 25px 0;
     }
   }
   .li-box {
@@ -209,6 +215,9 @@ export default {
     color: #333;
     @include defaultFlex;
     /*border-right: 1px dashed #BDB5E0;*/
+    img {
+      width: 140px;
+    }
   }
   .li-box-right {
     flex: 1;

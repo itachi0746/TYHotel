@@ -56,6 +56,7 @@
         <div class="close" @click="clickClose"></div>
       </div>
     </div>
+    <div class="aaa"></div>
   </div>
 </template>
 
@@ -85,7 +86,7 @@ export default {
      */
     async clickSign () {
       utils.toast(this, '', 'loading')
-      let posObj = await utils.getLocation2()
+      let posObj = await utils.weichatLatAndLon()
       let theData = {
         ActivityId: this.id,
         latitude: posObj.lat + '',
@@ -95,6 +96,7 @@ export default {
         console.log(res)
         utils.toast(this, '', 'clear')
         this.showLayer = true
+        this.isSigned = true
       })
     },
     clickMyAct () {
@@ -114,6 +116,9 @@ export default {
         utils.toast(this, '', 'clear')
         this.ruleDetail = res.Data.CMA1_CONTENT
         this.logoUrl = res.Data.CMA1_LOGO_URL
+        if (res.Data.CMA1_TITLE) {
+          document.title = res.Data.CMA1_TITLE
+        }
         this.getSignStatus()
       })
     },
@@ -145,7 +150,7 @@ export default {
         return
       }
     }
-    this.getData()
+//    this.getData()
   }
 }
 </script>
@@ -251,12 +256,19 @@ export default {
     background-color: #d4ae78;
     @include borderBox();
     padding: 50px 34px;
+    overflow-x: hidden;
 
     /deep/ * {
       padding: 0;
       margin: 0;
-      color: #333333;
-      font-size: 28px;
+      color: #333333!important;
+      font-size: 28px!important;
+      background-color: transparent!important;
+
+    }
+    /deep/ img {
+      max-width: 100%!important;
+      /*max-height: 100%;*/
     }
   }
 
@@ -351,5 +363,8 @@ export default {
   }
   .h151 {
     height: 191px;
+  }
+  .aaa {
+    justify-content: space-between;
   }
 </style>

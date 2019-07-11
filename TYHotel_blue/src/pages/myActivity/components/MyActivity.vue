@@ -11,47 +11,25 @@
       />
     </div>
     <van-pull-refresh v-model="isLoading" disabled @refresh="onRefresh" id="img-box" class="img-box" ref="img-box">
-        <van-list
-          v-model="loading"
-          :finished="finished"
-          finished-text="没有更多了"
-          @load="onLoad"
-        >
-          <ul ref="img-ul" class="img-ul">
-            <li class="img-li" ref="img-li" v-for="item in list" :key="item">
-              <div class="li-box">
-                <img :src="item.CMA1_IMG_URL" alt="" class="li-img">
-                <div class="li-mid">
-                  <div class="li-mid-top">{{item.CMA1_SPONSOR}}</div>
-                  <div class="li-mid-btm">
-                    <p>{{item.CMA1_START_DATE}}</p>
-                    <p>{{item.CMA1_ADDRESS}}</p>
-                  </div>
-                </div>
-                <div class="li-action">
-                  <div class="li-btn" @click="clickCheck">查 看</div>
-                </div>
-              </div>
-            </li>
-            <!--<li class="img-li" ref="img-li" v-for="item in list" :key="item">-->
-              <!--<div class="li-box">-->
-                <!--<img src="../assets/coin.png" alt="" class="li-img">-->
-                <!--<div class="li-mid">-->
-                  <!--<div class="li-mid-top">名字</div>-->
-                  <!--<div class="li-mid-btm">-->
-                    <!--<p>2019-5-16</p>-->
-                    <!--<p>广州海珠区海港大道117号</p>-->
-                  <!--</div>-->
-                <!--</div>-->
-                <!--<div class="li-action">-->
-                  <!--<div class="li-btn" @click="clickCheck">查 看</div>-->
-                <!--</div>-->
-              <!--</div>-->
-              <!--&lt;!&ndash;<img src="../assets/coin.png" @click="clickImgLi" v-lazy="require('../assets/coin.png')">&ndash;&gt;-->
-            <!--</li>-->
-          </ul>
-        </van-list>
 
+      <ul ref="img-ul" class="img-ul">
+        <li class="img-li" ref="img-li" v-for="item in list" :key="item">
+          <div class="li-box">
+            <img :src="item.CMA1_IMG_URL" alt="" class="li-img">
+            <!--<img src="../assets/coin.png" alt="" class="li-img">-->
+            <div class="li-mid">
+              <div class="li-mid-top">{{item.CMA1_SPONSOR}}</div>
+              <div class="li-mid-btm">
+                <p>{{item.CMA1_START_DATE}}</p>
+                <p>{{item.CMA1_ADDRESS}}</p>
+              </div>
+            </div>
+            <div class="li-action">
+              <div class="li-btn" @click="clickCheck">查 看</div>
+            </div>
+          </div>
+        </li>
+      </ul>
     </van-pull-refresh>
   </div>
 </template>
@@ -114,8 +92,8 @@ export default {
      * 点击查看
      * param id 活动id
      */
-    clickCheck (id) {
-      window.GoToPage('', 'index.html', {activityid: id})
+    clickCheck () {
+      window.GoToPage('', 'index.html', {activityid: this.id})
     },
     /**
      * 获取数据
@@ -172,8 +150,7 @@ export default {
     }
   }
   .li-box {
-    padding: 20px 0;
-    /*border-bottom: 1px solid #E95B3E;*/
+    padding: 11px 0;
     display: flex;
     background: url("../assets/i.png") no-repeat;
     background-size: 100% 100%;
@@ -182,6 +159,9 @@ export default {
     width: 186px;
     height: 186px;
     margin-right: 20px;
+    margin-left: 13px;
+    border-radius: 10px;
+    border: 5px solid #ffffff;
   }
   .li-mid {
     flex: 1;

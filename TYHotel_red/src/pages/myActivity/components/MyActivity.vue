@@ -90,8 +90,8 @@ export default {
      * 点击查看
      * param id 活动id
      */
-    clickCheck (id) {
-      window.GoToPage('', 'index.html', {activityid: id})
+    clickCheck () {
+      window.GoToPage('', 'index.html', {activityid: this.id})
     },
     /**
      * 获取数据
@@ -155,6 +155,7 @@ export default {
     width: 186px;
     height: 186px;
     margin-right: 20px;
+    border-radius: 10px;
   }
   .li-mid {
     flex: 1;

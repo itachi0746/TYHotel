@@ -82,7 +82,7 @@ export default {
      */
     async clickSign () {
       utils.toast(this, '', 'loading')
-      let posObj = await utils.getLocation2()
+      let posObj = await utils.weichatLatAndLon()
       let theData = {
         ActivityId: this.id,
         latitude: posObj.lat + '',
@@ -92,6 +92,7 @@ export default {
         console.log(res)
         utils.toast(this, '', 'clear')
         this.showLayer = true
+        this.isSigned = true
       })
     },
     clickMyAct () {
@@ -111,6 +112,9 @@ export default {
         utils.toast(this, '', 'clear')
         this.ruleDetail = res.Data.CMA1_CONTENT
         this.logoUrl = res.Data.CMA1_LOGO_URL
+        if (res.Data.CMA1_TITLE) {
+          document.title = res.Data.CMA1_TITLE
+        }
         this.getSignStatus()
       })
     },
@@ -247,12 +251,19 @@ export default {
     /*height: 1000px;*/
     @include borderBox();
     padding: 50px 34px;
+    overflow-x: hidden;
 
     /deep/ * {
       padding: 0;
       margin: 0;
-      font-size: 28px;
-      color: #FB5114;
+      font-size: 28px!important;
+      color: #fff!important;
+      background-color: transparent!important;
+
+    }
+    /deep/ img {
+      max-width: 100%!important;
+      /*max-height: 100%;*/
     }
   }
 

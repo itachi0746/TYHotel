@@ -8,27 +8,30 @@
     <div class="title-box">
       <!--<img src="../assets/yaoqinghan.png" alt="">-->
     </div>
-    <div class="btm">
-      <div class="btm-font">{{resData.CMA1_START_DATE}}</div>
-      <div class="btm-font btm-font-h">
-        <i class="line"></i>
-        抽奖活动
-        <i class="line"></i>
+    <div class="btm-box">
+      <div class="btm">
+        <div class="btm-font">{{resData.CMA1_START_DATE}}</div>
+        <div class="btm-font btm-font-h">
+          <i class="line"></i>
+          抽奖活动
+          <i class="line"></i>
+        </div>
+        <div class="btm-font">{{resData.CMA1_SPONSOR}}</div>
+        <div class="btm-font btm-font2">地址：{{resData.CMA1_ADDRESS}}</div>
       </div>
-      <div class="btm-font">{{resData.CMA1_SPONSOR}}</div>
-      <div class="btm-font btm-font2">地址：{{resData.CMA1_ADDRESS}}</div>
+      <div class="action-box-con">
+        <div class="action-box" @click="clickBtn" v-if="!isJoined">
+          我要报名
+        </div>
+        <div class="action-box van-button--disabled" v-if="isJoined">
+          您已报名
+        </div>
+        <div class="action-box mt20" @click="toIndex" v-if="isJoined">
+          去主页
+        </div>
+      </div>
     </div>
-    <div class="action-box-con">
-      <div class="action-box" @click="clickBtn" v-if="!isJoined">
-        我要报名
-      </div>
-      <div class="action-box van-button--disabled" v-if="isJoined">
-        您已报名
-      </div>
-      <div class="action-box mt20" @click="toIndex" v-if="isJoined">
-        去主页
-      </div>
-    </div>
+
   </div>
 </template>
 
@@ -178,4 +181,12 @@ export default {
     font-weight: bold;
     font-size: 36px;
   }
+  .btm-box {
+    position: absolute;
+    bottom: 40px;
+    left: 0;
+    width: 100%;
+
+  }
+
 </style>

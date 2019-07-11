@@ -22,10 +22,10 @@
               <div class="li-box">
                 <div class="li-box-inner">
                   <div class="li-box-left">
-                    <div class="money-box">
+                    <!--<div class="money-box">-->
                       <img :src="imgObj[item.CMF3_PRIZE_TYPE]" alt="">
                       <!--<img src="../assets/m.png" alt="">-->
-                    </div>
+                    <!--</div>-->
                   </div>
                   <div class="li-box-right">
                     <div class="li-box-right-inner">
@@ -188,7 +188,7 @@ export default {
     li {
       width: 100%;
       @include borderBox();
-      padding: 30px 25px 0;
+      padding: 20px 25px 0;
     }
   }
   .li-box {
@@ -209,6 +209,9 @@ export default {
     color: #333;
     @include defaultFlex;
     /*border-right: 1px dashed #BDB5E0;*/
+    img {
+      width: 140px;
+    }
   }
   .li-box-right {
     flex: 1;

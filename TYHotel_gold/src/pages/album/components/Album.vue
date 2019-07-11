@@ -39,7 +39,7 @@
                 <van-row>
                   <van-col span="8" v-for="(img,index) in item.imgArr" :key="index">
                     <div class="col-box">
-                      <img @click="clickImgLi(img.CMA7_FILE_URL)" v-lazy="img.CMA7_FILE_URL">
+                      <div class="col-box-inner" @click="clickImgLi(img.CMA7_FILE_URL)" v-lazy:background-image="img.CMA7_FILE_URL"></div>
                     </div>
                   </van-col>
                 </van-row>
@@ -207,12 +207,17 @@ export default {
           let obj = {date: theDate, imgArr: []}
           this.picArr.push(obj)
         } else {
+          let have = false // picArr是否已经有这个日期
           for (let obj of this.picArr) { // 遍历本地图片数组
             let objDate = obj.date
-            if (objDate !== theDate) { // 比较图片日期 如果没有则新增一个对象保存
-              let obj = {date: theDate, imgArr: []}
-              this.picArr.push(obj)
+            if (objDate === theDate) { // 比较图片日期 如果没有则新增一个对象保存
+              have = true // 已有该日期
+              break
             }
+          }
+          if (!have) {
+            let obj = {date: theDate, imgArr: []}
+            this.picArr.push(obj)
           }
         }
       }
@@ -292,7 +297,7 @@ export default {
   .li-top {
     display: flex;
     align-items: center;
-    color: #333;
+    color: #fff;
     font-size: 28px;
     padding-left: 10px;
     img {
@@ -302,9 +307,18 @@ export default {
   }
   .col-box {
     width: 100%;
+    height: 220px;
+
     text-align: center;
-    padding: 0 10px 20px;
+    padding: 0 10px 10px;
     @include borderBox();
     /*margin-bottom: 0.25rem;*/
+  }
+  .col-box-inner {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   }
 </style>
