@@ -604,7 +604,7 @@ export default {
               lat: 0,
               lng: 0
             };
-            reject(data)
+            resolve(data)
           },
           fail: function (res) {
             console.log('获取位置失败: ', JSON.stringify(res))
@@ -612,7 +612,7 @@ export default {
               lat: 0,
               lng: 0
             };
-            reject(data)
+            resolve(data)
           }
         });
         wx.error(function (res) {
@@ -621,7 +621,7 @@ export default {
             lat: 0,
             lng: 0
           };
-          reject(data)
+          resolve(data)
         });
         // });
       } catch (err) {
@@ -630,7 +630,7 @@ export default {
           lat: 0,
           lng: 0
         };
-        reject(data)
+        resolve(data)
       }
     })
   },

@@ -13,8 +13,11 @@
         </div>
         <div class="fill"></div>
         <div class="btn-box">
-          <div class="btn-container" @click="clickSign">
+          <div class="btn-container" @click="clickSign" v-if="!isSigned">
             <span>签 到</span>
+          </div>
+          <div class="btn-container van-button--disabled" v-else>
+            <span>您已签到</span>
           </div>
         </div>
 

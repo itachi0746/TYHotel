@@ -18,14 +18,14 @@
             <img :src="item.CMA1_IMG_URL" alt="" class="li-img">
             <!--<img src="../assets/coin.png" alt="" class="li-img">-->
             <div class="li-mid">
-              <div class="li-mid-top">{{item.CMA1_SPONSOR}}</div>
+              <div class="li-mid-top">{{item.CMA1_TITLE}}</div>
               <div class="li-mid-btm">
                 <p>{{item.CMA1_START_DATE}}</p>
                 <p>{{item.CMA1_ADDRESS}}</p>
               </div>
             </div>
             <div class="li-action">
-              <div class="li-btn" @click="clickCheck">查 看</div>
+              <div class="li-btn" @click="clickCheck(item.CMA1_ID)">查 看</div>
             </div>
           </div>
         </li>
@@ -92,8 +92,8 @@ export default {
      * 点击查看
      * param id 活动id
      */
-    clickCheck () {
-      window.GoToPage('', 'index.html', {activityid: this.id})
+    clickCheck (id) {
+      window.GoToPage('', 'index.html', {activityid: id})
     },
     /**
      * 获取数据

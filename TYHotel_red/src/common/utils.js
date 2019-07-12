@@ -618,7 +618,7 @@ export default {
               lat: 0,
               lng: 0
             };
-            reject(data)
+            resolve(data)
           },
           fail: function (res) {
             console.log('获取位置失败: ', JSON.stringify(res))
@@ -626,7 +626,7 @@ export default {
               lat: 0,
               lng: 0
             };
-            reject(data)
+            resolve(data)
           }
         });
         wx.error(function (res) {
@@ -635,16 +635,16 @@ export default {
             lat: 0,
             lng: 0
           };
-          reject(data)
+          resolve(data)
         });
         // });
       } catch (err) {
-        console.log('没有err对象: ', JSON.stringify(err))
+        console.log('没有wx对象: ', JSON.stringify(err))
         data = {
           lat: 0,
           lng: 0
         };
-        reject(data)
+        resolve(data)
       }
     })
   },

@@ -16,18 +16,18 @@
           <li class="img-li" ref="img-li" v-for="item in list" :key="item">
             <div class="li-box">
               <div class="li-img-box">
-                <!--<img :src="item.CMA1_IMG_URL" alt="" class="li-img">-->
-                <img src="../assets/coin.png" alt="" class="li-img">
+                <img :src="item.CMA1_IMG_URL" alt="" class="li-img">
+                <!--<img src="../assets/coin.png" alt="" class="li-img">-->
               </div>
               <div class="li-mid">
-                <div class="li-mid-top">{{item.CMA1_SPONSOR}}</div>
+                <div class="li-mid-top">{{item.CMA1_TITLE}}</div>
                 <div class="li-mid-btm">
                   <p>{{item.CMA1_START_DATE}}</p>
                   <p>{{item.CMA1_ADDRESS}}</p>
                 </div>
               </div>
               <div class="li-action">
-                <div class="li-btn" @click="clickCheck">查 看</div>
+                <div class="li-btn" @click="clickCheck(item.CMA1_ID)">查 看</div>
               </div>
             </div>
           </li>
@@ -95,8 +95,8 @@ export default {
      * 点击查看
      * param id 活动id
      */
-    clickCheck () {
-      window.GoToPage('', 'index.html', {activityid: this.id})
+    clickCheck (id) {
+      window.GoToPage('', 'index.html', {activityid: id})
     },
     /**
      * 获取数据
@@ -165,13 +165,14 @@ export default {
     /*background-color: #fff;*/
     margin-right: 20px;
     max-height: 190px;
+    min-width: 190px;
     @include borderBox()
   }
   .li-img {
     width: 180px;
     height: 180px;
     border-radius: 10px;
-    border: 1px solid #fff;
+    /*border: 1px solid #fff;*/
   }
   .li-mid {
     flex: 1;

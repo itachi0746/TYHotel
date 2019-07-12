@@ -150,7 +150,7 @@ export default {
         return
       }
     }
-//    this.getData()
+    this.getData()
   }
 }
 </script>

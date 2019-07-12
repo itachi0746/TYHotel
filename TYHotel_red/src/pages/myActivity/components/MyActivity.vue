@@ -16,7 +16,7 @@
           <div class="li-box">
             <img :src="item.CMA1_IMG_URL" alt="" class="li-img">
             <div class="li-mid">
-              <div class="li-mid-top">{{item.CMA1_SPONSOR}}</div>
+              <div class="li-mid-top">{{item.CMA1_TITLE}}</div>
               <div class="li-mid-btm">
                 <p>{{item.CMA1_START_DATE}}</p>
                 <p>{{item.CMA1_ADDRESS}}</p>
@@ -90,8 +90,8 @@ export default {
      * 点击查看
      * param id 活动id
      */
-    clickCheck () {
-      window.GoToPage('', 'index.html', {activityid: this.id})
+    clickCheck (id) {
+      window.GoToPage('', 'index.html', {activityid: id})
     },
     /**
      * 获取数据
