@@ -1,7 +1,8 @@
 <template>
   <div class="index-box">
     <div class="main">
-      <img src="../assets/n.png" alt="">
+      <img src="../assets/n.png" alt="" v-if="!theBgImg">
+      <img :src="theBgImg" alt="" v-else>
       <div class="main-box">
         <div class="logo-box">
           <div class="logo-container">
@@ -65,7 +66,8 @@ export default {
       showLayer: false,
       logoUrl: null, // 酒店logo图片
       ruleDetail: null, // 活动规则说明
-      isSigned: false // 是否已签到
+      isSigned: false, // 是否已签到
+      theBgImg: null // 背景图片
     }
   },
   components: {},
@@ -111,6 +113,7 @@ export default {
         utils.toast(this, '', 'clear')
         this.ruleDetail = res.Data.CMA1_CONTENT
         this.logoUrl = res.Data.CMA1_LOGO_URL
+        this.theBgImg = res.Data.CMA1_IMG_URL
         if (res.Data.CMA1_TITLE) {
           document.title = res.Data.CMA1_TITLE
         }
@@ -156,6 +159,7 @@ export default {
     width: 100%;
     img {
       width: 100%;
+      height: 1334px;
       /*height: 100%;*/
     }
   }
@@ -262,7 +266,7 @@ export default {
 
   .btm-box {
     padding: 40px 30px;
-    background-color: #FC4929;
+    /*background-color: #FC4929;*/
   }
 
   .font-box {
