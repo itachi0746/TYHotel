@@ -169,6 +169,8 @@ export default {
     top: 0;
     left: 0;
     width: 100%;
+    background-color: #FC4929;
+
   }
 
   .btm {

@@ -44,7 +44,7 @@
       </div>
     </div>
     <!--背景-->
-    <div class="bg"></div>
+    <!--<div class="bg"></div>-->
     <!--弹窗-->
     <div class="layer" @touchmove.prevent="" v-if="showLayer">
       <div class="layer-box">
@@ -178,6 +178,8 @@ export default {
     top: 0;
     left: 0;
     width: 100%;
+    background-color: #5A069A;
+
   }
 
   .btm {
