@@ -1,9 +1,14 @@
 <template>
   <div class="index-box">
     <div class="main">
-      <img src="../assets/n.png" alt="" v-if="!theBgImg">
-      <img :src="theBgImg" alt="" v-else>
+      <!--<img src="../assets/n.png" alt="">-->
+
+      <!--<img src="../assets/n.png" alt="" v-if="!theBgImg">-->
+      <!--<img :src="theBgImg" alt="" v-else>-->
       <div class="main-box">
+        <img class="main-bg" src="../assets/n.png" alt="" v-if="!theBgImg">
+        <img class="main-bg" :src="theBgImg" alt="" v-else>
+
         <div class="logo-box">
           <div class="logo-container">
             <img :src="logoUrl" alt="" v-if="logoUrl">
@@ -157,9 +162,14 @@ export default {
 <style lang="scss" scoped>
   .main {
     width: 100%;
-    img {
+    position: relative;
+    &>img {
       width: 100%;
       height: 1334px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 10;
       /*height: 100%;*/
     }
   }
@@ -205,6 +215,7 @@ export default {
   .title-box {
     text-align: center;
     height: 292px;
+    position: relative;
     img {
       height: 100%;
     }
@@ -216,6 +227,7 @@ export default {
 
   .btn-box {
     height: 96px;
+    position: relative;
   }
 
   .btn-container {
@@ -240,6 +252,7 @@ export default {
     color: #ffffff;
     font-size: 34px;
     font-weight: bold;
+    position: relative;
   }
 
   .coin {
@@ -268,6 +281,7 @@ export default {
 
   .btm-box {
     padding: 40px 30px;
+    position: relative;
     /*background-color: #FC4929;*/
   }
 
@@ -357,5 +371,13 @@ export default {
     img {
       width: 100%;
     }
+  }
+  .main-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1334px;
+
   }
 </style>

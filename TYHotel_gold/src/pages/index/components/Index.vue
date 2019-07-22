@@ -3,10 +3,11 @@
     <div class="main">
       <!--<img src="../assets/ff.png" alt="">-->
 
-      <img src="../assets/ff.png" alt="" v-if="!theBgImg">
-      <img :src="theBgImg" alt="" v-else>
+
 
       <div class="main-box">
+        <img class="main-bg" src="../assets/ff.png" alt="" v-if="!theBgImg">
+        <img class="main-bg" :src="theBgImg" alt="" v-else>
         <div class="logo-box">
           <div class="logo-container">
             <img :src="logoUrl" alt="" v-if="logoUrl">
@@ -170,11 +171,16 @@ export default {
     &>img {
       width: 100%;
       height: 714px;
-
-      /*height: 100%;*/
     }
   }
+  .main-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 714px;
 
+  }
   .main-box {
     position: absolute;
     top: 0;
@@ -217,6 +223,7 @@ export default {
     text-align: center;
     height: 177px;
     margin-top: 20px;
+    position: relative;
     img {
       height: 100%;
     }
@@ -229,6 +236,7 @@ export default {
   .btn-box {
     height: 96px;
     margin-bottom: 55px;
+    position: relative;
   }
 
   .btn-container {
@@ -359,6 +367,7 @@ export default {
     background: url("../assets/huodongguize.png") no-repeat;
     background-size: 100% 100%;
     @include defaultFlex;
+    position: relative;
   }
   .img1 {
     margin-top: 15px;
