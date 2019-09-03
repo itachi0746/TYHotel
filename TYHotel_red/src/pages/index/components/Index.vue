@@ -143,16 +143,18 @@ export default {
   },
   created () {
     const params = utils.getUrlParams()
-    if (process.env.NODE_ENV === 'development') { // 测试用id
-      this.id = '5b8158d60c2d448c8d03591df66c30c9'
-    } else {
-      // 生产环境下的id
-      this.id = params.activityid
-      if (!this.id) {
-        utils.toast(this, '未知活动', 'fail')
-        return
-      }
-    }
+//    if (process.env.NODE_ENV === 'development') { // 测试用id
+//      this.id = '4f787ad1f8924217a650d8632bf9e466'
+//    } else {
+//      // 生产环境下的id
+//      this.id = params.activityid
+//      if (!this.id) {
+//        utils.toast(this, '未知活动', 'fail')
+//        return
+//      }
+//    }
+    this.id = params.activityid || '17006a8988dc41efadb3a76236ecd493'
+
     this.getData()
   }
 }

@@ -22,11 +22,11 @@
             <div class="li-box" :style="{backgroundImage: `url(${imgObj[item.CMF3_PRIZE_TYPE]})`}">
               <div class="li-box-inner">
                 <div class="li-box-left">
-                  <!--<div class="money-box">-->
-                    <!--<i class="rmb">￥</i>-->
-                    <!--<span class="money">{{item.CMF3_VALUE}}</span>-->
-                  <!--</div>-->
-                  <img :src="logoObj[item.CMF3_PRIZE_TYPE]" alt="">
+                  <div class="money-box">
+                    <i class="rmb">￥</i>
+                    <span class="money">{{item.CMF3_VALUE}}</span>
+                  </div>
+                  <!--<img :src="imgObj[item.CMF3_PRIZE_TYPE]" alt="">-->
 
                 </div>
                 <div class="li-box-right">
@@ -70,16 +70,17 @@ export default {
   },
   created () {
     const params = utils.getUrlParams()
-    if (process.env.NODE_ENV === 'development') { // 测试用id
-      this.id = '5b8158d60c2d448c8d03591df66c30c9'
-    } else {
-      // 生产环境下的id
-      this.id = params.activityid
-      if (!this.id) {
-        utils.toast(this, '未知活动', 'fail')
-        return
-      }
-    }
+//    if (process.env.NODE_ENV === 'development') { // 测试用id
+//      this.id = '5b8158d60c2d448c8d03591df66c30c9'
+//    } else {
+//      // 生产环境下的id
+//      this.id = params.activityid
+//      if (!this.id) {
+//        utils.toast(this, '未知活动', 'fail')
+//        return
+//      }
+//    }
+    this.id = params.activityid || '17006a8988dc41efadb3a76236ecd493'
     this.getData()
   },
   methods: {
