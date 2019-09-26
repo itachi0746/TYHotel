@@ -2,7 +2,7 @@
   <div class="main">
     <div class="logo-box">
       <div class="logo-container">
-        <img :src="logoUrl" alt="" v-if="logoUrl">
+        <img :src="resData.CMA1_LOGO_URL" alt="" v-if="resData">
       </div>
     </div>
     <div class="title-box">

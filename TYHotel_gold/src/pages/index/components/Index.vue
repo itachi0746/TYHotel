@@ -3,8 +3,6 @@
     <div class="main">
       <!--<img src="../assets/ff.png" alt="">-->
 
-
-
       <div class="main-box">
         <img class="main-bg" src="../assets/ff.png" alt="" v-if="!theBgImg">
         <img class="main-bg" :src="theBgImg" alt="" v-else>
