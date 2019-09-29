@@ -1,11 +1,11 @@
 <template>
-  <div class="main">
+  <div class="main" :style="{'backgroundImage': bgImg?`url(${bgImg})`:''}">
     <div class="logo-box">
       <div class="logo-container">
         <img :src="resData.CMA1_LOGO_URL" alt="" v-if="resData">
       </div>
     </div>
-    <div class="main-box">
+    <div :class="bgImg?'main-box2':'main-box'">
       <div class="fillter"></div>
       <div class="title-box">
         <div class="title-container">
@@ -57,7 +57,9 @@ export default {
     return {
       id: null, // 活动id
       resData: null,
-      isJoined: false // 是否已参加该活动
+      isJoined: false, // 是否已参加该活动
+      bgImg: ''
+
     }
   },
   methods: {
@@ -78,6 +80,7 @@ export default {
         console.log(res)
         utils.toast(this, '', 'clear')
         this.resData = res.Data
+        this.bgImg = res.Data.CMA1_IMG_URL
         utils.formatObj(this.resData, false)
         this.getJoinStatus()
       })
@@ -133,7 +136,15 @@ export default {
     position: relative;
   }
   .main-box {
-    background: url("../assets/e.png") no-repeat;
+    background-image: url("../assets/e.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    width: 100%;
+    min-height: 1283px;
+  }
+  .main-box2 {
+    /*background-image: url("../assets/e.png");*/
+    background-repeat: no-repeat;
     background-size: 100% 100%;
     width: 100%;
     min-height: 1283px;

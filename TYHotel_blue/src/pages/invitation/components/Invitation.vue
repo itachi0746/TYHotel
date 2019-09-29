@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="main" :style="{'backgroundImage': bgImg?`url(${bgImg})`:''}">
     <div class="logo-box">
       <div class="logo-container">
         <img :src="resData.CMA1_LOGO_URL" alt="" v-if="resData">
@@ -43,7 +43,8 @@ export default {
     return {
       id: null, // 活动id
       resData: null,
-      isJoined: false // 是否已参加该活动
+      isJoined: false, // 是否已参加该活动
+      bgImg: ''
     }
   },
   methods: {
@@ -64,6 +65,7 @@ export default {
         console.log(res)
         utils.toast(this, '', 'clear')
         this.resData = res.Data
+        this.bgImg = res.Data.CMA1_IMG_URL
         utils.formatObj(this.resData, false)
         this.getJoinStatus()
       })
@@ -115,7 +117,8 @@ export default {
     position: relative;
   }
   .main {
-    background: url("../assets/c.png") no-repeat;
+    background-image: url("../assets/c.png");
+    background-repeat: no-repeat;
     background-size: 100% 100%;
   }
   .title-box {
