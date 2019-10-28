@@ -22,16 +22,18 @@
             <div class="li-box" :style="{backgroundImage: `url(${imgObj[item.CMF3_PRIZE_TYPE]})`}">
               <div class="li-box-inner">
                 <div class="li-box-left">
-                  <div class="money-box">
-                    <i class="rmb">￥</i>
-                    <span class="money">{{item.CMF3_VALUE}}</span>
-                  </div>
-                  <!--<img :src="imgObj[item.CMF3_PRIZE_TYPE]" alt="">-->
+                  <!--<div class="money-box">-->
+                    <!--<i class="rmb">￥</i>-->
+                    <!--<span class="money">{{item.CMF3_VALUE}}</span>-->
+                  <!--</div>-->
+                  <img :src="logoObj[item.CMF3_PRIZE_TYPE]" alt="" v-if="!item.CMF3_IMG_1">
+                  <img :src="item.CMF3_IMG_1" alt="" v-else>
 
                 </div>
                 <div class="li-box-right">
                   <div class="li-box-right-inner">
                     <div class="prize-name">{{item.CMF3_PRIZE_NAME}}</div>
+                    <div class="BIZ_NAME">{{item.BIZ_NAME}}</div>
                     <div class="prize-time">获奖日期：{{item.CMF3_CRT_TIME}}</div>
                   </div>
                 </div>
@@ -61,6 +63,11 @@ export default {
         'CMF801': require('../assets/hongbao.png'), // 红包
         'CMF802': require('../assets/quan.png'), // 券
         'CMF803': require('../assets/other.png') // 其他
+      },
+      logoObj: { // 不同奖品类型对应不同logo
+        'CMF801': require('../assets/k.png'), // 红包
+        'CMF802': require('../assets/m.png'), // 券
+        'CMF803': require('../assets/n.png') // 其他
       }
     }
   },
@@ -70,17 +77,17 @@ export default {
   },
   created () {
     const params = utils.getUrlParams()
-//    if (process.env.NODE_ENV === 'development') { // 测试用id
-//      this.id = '5b8158d60c2d448c8d03591df66c30c9'
-//    } else {
-//      // 生产环境下的id
-//      this.id = params.activityid
-//      if (!this.id) {
-//        utils.toast(this, '未知活动', 'fail')
-//        return
-//      }
-//    }
-    this.id = params.activityid || '17006a8988dc41efadb3a76236ecd493'
+    if (process.env.NODE_ENV === 'development') { // 测试用id
+      this.id = '5b8158d60c2d448c8d03591df66c30c9'
+    } else {
+      // 生产环境下的id
+      this.id = params.activityid
+      if (!this.id) {
+        utils.toast(this, '未知活动', 'fail')
+        return
+      }
+    }
+//    this.id = params.activityid || '17006a8988dc41efadb3a76236ecd493'
     this.getData()
   },
   methods: {
@@ -212,6 +219,7 @@ export default {
     @include defaultFlex;
     img {
       width: 140px;
+      height: 140px;
     }
   }
   .li-box-right {
@@ -219,7 +227,7 @@ export default {
   }
   .li-box-right-inner {
     height: 100%;
-    padding: 45px 50px;
+    padding: 30px 50px;
     color: #333;
     display: flex;
     flex-direction: column;
@@ -245,5 +253,8 @@ export default {
   .money-box {
     position: relative;
     margin-left: 20px;
+  }
+  .BIZ_NAME {
+    font-size: 28px;
   }
 </style>

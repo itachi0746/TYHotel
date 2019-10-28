@@ -40,8 +40,9 @@
                     <div class="col-box">
                       <div class="col-box-inner"
                            @click="clickImgLi(img.CMA7_FILE_URL)"
-                           v-lazy:background-image="img.CMA7_FILE_URL"
-                           loading="loadImg"></div>
+                           v-lazy:background-image="img.SAMLL_IMG"
+                           :loading="loadImg"
+                      ></div>
 
                     </div>
                   </van-col>

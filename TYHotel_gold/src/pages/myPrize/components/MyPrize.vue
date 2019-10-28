@@ -23,13 +23,16 @@
                 <div class="li-box-inner">
                   <div class="li-box-left">
                     <!--<div class="money-box">-->
-                      <img :src="imgObj[item.CMF3_PRIZE_TYPE]" alt="">
-                      <!--<img src="../assets/m.png" alt="">-->
+                    <img :src="logoObj[item.CMF3_PRIZE_TYPE]" alt="" v-if="!item.CMF3_IMG_1">
+                    <img :src="item.CMF3_IMG_1" alt="" v-else>
+
+                    <!--<img src="../assets/m.png" alt="">-->
                     <!--</div>-->
                   </div>
                   <div class="li-box-right">
                     <div class="li-box-right-inner">
                       <div class="prize-name">{{item.CMF3_PRIZE_NAME}}</div>
+                      <div class="BIZ_NAME">{{item.BIZ_NAME}}</div>
                       <div class="prize-time">获奖日期：{{item.CMF3_CRT_TIME}}</div>
                     </div>
                   </div>
@@ -56,7 +59,7 @@ export default {
       isLoading: false,
       pageIndex: 1, // 当前页
       pageCount: null, // 总页数
-      imgObj: { // 不同奖品类型对应不同背景图
+      logoObj: { // 不同奖品类型对应不同logo
         'CMF801': require('../assets/hongbao.png'), // 红包
         'CMF802': require('../assets/quan.png'), // 券
         'CMF803': require('../assets/other.png') // 其他
@@ -211,6 +214,8 @@ export default {
     /*border-right: 1px dashed #BDB5E0;*/
     img {
       width: 140px;
+      height: 140px;
+
     }
   }
   .li-box-right {
@@ -218,7 +223,7 @@ export default {
   }
   .li-box-right-inner {
     height: 100%;
-    padding: 45px 50px;
+    padding: 30px 50px;
     color: #333;
     display: flex;
     flex-direction: column;
@@ -254,5 +259,8 @@ export default {
     right: 0;
     top: 0;
     height: 100%;
+  }
+  .BIZ_NAME {
+    font-size: 28px;
   }
 </style>

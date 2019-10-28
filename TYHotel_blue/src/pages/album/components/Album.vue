@@ -38,7 +38,11 @@
                 <van-row>
                   <van-col span="8" v-for="(img,index) in item.imgArr" :key="index">
                     <div class="col-box">
-                      <div class="col-box-inner" @click="clickImgLi(img.CMA7_FILE_URL)" v-lazy:background-image="img.CMA7_FILE_URL"></div>
+                      <div class="col-box-inner"
+                           @click="clickImgLi(img.CMA7_FILE_URL)"
+                           v-lazy:background-image="img.SAMLL_IMG"
+                           :loading="loadImg"
+                      ></div>
                     </div>
                   </van-col>
                 </van-row>
@@ -67,7 +71,9 @@ export default {
       pageIndex: 1, // 当前页
       pageCount: null, // 总页数
       picArr: [], // 相册数组
-      bkimg: require('../assets/yaoqinghan.png')
+      bkimg: require('../assets/yaoqinghan.png'),
+      loadImg: require('../assets/loading.gif')
+
     }
   },
   components: {},
