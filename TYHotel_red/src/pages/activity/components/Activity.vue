@@ -1,14 +1,14 @@
 <template>
   <div class="album">
     <div ref="header" class="header">
-      <van-nav-bar
-        title="所有活动"
-        left-text=""
-        right-text=""
-        left-arrow
-        @click-left="onClickLeft"
-        @click-right=""
-      />
+      <!--<van-nav-bar-->
+        <!--title="所有活动"-->
+        <!--left-text=""-->
+        <!--right-text=""-->
+        <!--left-arrow-->
+        <!--@click-left="onClickLeft"-->
+        <!--@click-right=""-->
+      <!--/>-->
     </div>
     <van-pull-refresh v-model="isLoading" disabled @refresh="onRefresh" id="img-box" class="img-box" ref="img-box">
       <van-list
@@ -25,6 +25,7 @@
             <div class="li-mid">
               <div class="li-mid-top">{{item.CMA1_TITLE}}</div>
               <div class="li-mid-btm">
+                <p>{{item.ReferenceValues.CMA1_OWNER_ACCT}}</p>
                 <p>{{item.CMA1_START_DATE}}</p>
                 <p>{{item.CMA1_ADDRESS}}</p>
               </div>
