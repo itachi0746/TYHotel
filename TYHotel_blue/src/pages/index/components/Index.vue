@@ -48,7 +48,7 @@
     <!--背景-->
     <!--<div class="bg"></div>-->
     <!--弹窗-->
-    <div class="layer" @touchmove.prevent="" v-if="showLayer">
+    <div class="layer" @touchmove.prevent="" v-show="showLayer">
       <div class="layer-box">
         <div class="tac">
           <img class="img1" src="../assets/e.png" alt="">

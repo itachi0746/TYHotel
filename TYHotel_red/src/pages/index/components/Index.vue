@@ -49,7 +49,7 @@
     <!--背景-->
     <div class="bg"></div>
     <!--弹窗-->
-    <div class="layer" @touchmove.prevent="" v-if="showLayer">
+    <div class="layer" @touchmove.prevent="" v-show="showLayer">
       <div class="layer-box">
         <img src="../assets/j.png" alt="">
         <span>签到成功!</span>

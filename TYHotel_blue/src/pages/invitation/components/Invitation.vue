@@ -65,7 +65,9 @@ export default {
         console.log(res)
         utils.toast(this, '', 'clear')
         this.resData = res.Data
-        this.bgImg = res.Data.CMA1_IMG_URL
+//        this.bgImg = res.Data.CMA1_IMG_URL
+        this.bgImg = res.Data.CMA1_IMG_URL3
+
         utils.formatObj(this.resData, false)
         this.getJoinStatus()
       })
